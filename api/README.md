@@ -30,14 +30,11 @@ Because we are running our development environent in Docker you don't need to ha
     $ docker pull hermanzdosilovic/judge0-base
     ```
 
-2. Open [docker-compose.dev.yml](https://github.com/hermanzdosilovic/judge0/blob/master/api/docker-compose.dev.yml#L8-L9) and change lines 8 and 9.
-  * You can get your username with `echo $USER`, and user id with `echo $UID`
-
-3. Run development shell (it will take a while only first time):
+2. Run development shell (it will take a while only first time):
     ```
     $ ./dev-shell
     ```
-4. Create, migrate and seed the database:
+3. Create, migrate and seed the database:
     ```
     $ rails db:create db:migrate db:seed
     ```
@@ -62,16 +59,19 @@ This is minimal setup for development environment, now you can open your favorit
 
 To host your own judge0 you need to install [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) on your server and after you are done proceed with the following:
 
-1. Copy [docker-compose.yml](https://github.com/hermanzdosilovic/judge0/blob/master/api/docker-compose.yml), [docker-compose.prod.yml](https://github.com/hermanzdosilovic/judge0/blob/master/api/docker-compose.prod.yml), [nginx.conf](https://github.com/hermanzdosilovic/judge0/blob/master/api/nginx.conf) and [judge0-api.conf](https://github.com/hermanzdosilovic/judge0/blob/master/api/judge0-api.conf) to your server
-2. In [judge0-api.conf](https://github.com/hermanzdosilovic/judge0/blob/master/api/judge0-api.conf) change following variables:
-  * [`RAILS_ENV`](https://github.com/hermanzdosilovic/judge0/blob/master/api/judge0-api.conf#L5)
-  * [`ALLOW_ORIGIN`](https://github.com/hermanzdosilovic/judge0/blob/master/api/judge0-api.conf#L16)
-3. In [nginx.conf](https://github.com/hermanzdosilovic/judge0/blob/master/api/nginx.conf) change [`server_name`](https://github.com/hermanzdosilovic/judge0/blob/master/api/nginx.conf#L3)
-4. Run all services:
+1. Copy [docker-compose.prod.yml](https://github.com/hermanzdosilovic/judge0/blob/master/api/docker-compose.prod.yml) on your server and save it as `docker-compose.yml`
       ```
-      $ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+      $ wget https://github.com/hermanzdosilovic/judge0/blob/master/api/docker-compose.prod.yml -O docker-compose.yml
       ```
-5. Migrate and seed the database:
+
+2. Copy [judge0-api.conf](https://github.com/hermanzdosilovic/judge0/blob/master/api/judge0-api.conf) to your server
       ```
-      $ docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec api rails db:migrate db:seed
+      $ wget https://github.com/hermanzdosilovic/judge0/blob/master/api/judge0-api.conf
+      ```
+
+3. In `judge0-api.conf` change following variables: `RAILS_ENV` and `ALLOW_ORIGIN`.
+4. In `docker-compose.yml` change following variables: `VIRTUAL_HOST`, `LETSENCRYPT_HOST` and `LETSENCRYPT_EMAIL`.
+5. Run all services:
+      ```
+      $ docker-compose up -d
       ```
